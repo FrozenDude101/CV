@@ -1,0 +1,36 @@
+name: Build CV
+run-name: Rebuild triggered by @${{github.actor}}
+on:
+  push:
+    branches:
+      - main
+jobs:
+  build-cv:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out the repository
+        uses: actions/checkout@v4
+        
+      - name: Build the CV
+        uses: xu-cheng/latex-action@v3
+        with:
+          root_file: source/CV.tex
+          
+      - name: Create Release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          release_name: Latest CV
+          draft: false
+          prerelease: false
+          
+      - name: Upload CV
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: CV.pdf
+          asset_name: Matthew-Hammond-CV.pdf
+          asset_content_type: pdf
