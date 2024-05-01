@@ -20,13 +20,20 @@ jobs:
         with:
           root_file: source/CV.tex
           
+      - name: Delete previous release(s)
+        uses: dev-drprasad/delete-older-releases@v0.3.3
+        with:
+          keep_latest: 0
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          
       - name: Create Release
         id: create_release
         uses: actions/create-release@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          tag_name: ${{ github.event.head_commit.timestamp }}
+          tag_name: latest
           release_name: Latest CV
           draft: false
           prerelease: false
