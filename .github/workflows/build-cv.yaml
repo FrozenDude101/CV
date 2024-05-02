@@ -7,7 +7,6 @@ on:
 
 permissions:
   write-all
-  read-all
   
 concurrency:
   group: "pages"
