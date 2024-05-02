@@ -19,7 +19,7 @@ jobs:
       url: ${{ steps.deployment.outputs.page_url }}
     runs-on: ubuntu-latest
     steps:
-      - name: Check out the repository
+      - name: Check Out the Repository
         uses: actions/checkout@v4
         
       - name: Build the CV
@@ -27,7 +27,7 @@ jobs:
         with:
           root_file: source/Matthew-Hammond-CV.tex
           
-      - name: Delete previous release(s)
+      - name: Delete Previous Release(s)
         uses: dev-drprasad/delete-older-releases@v0.3.3
         with:
           keep_latest: 0
@@ -51,17 +51,20 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: Matthew-Hammond-CV.pdf
+          asset_path: CV.pdf
           asset_name: Matthew-Hammond-CV.pdf
           asset_content_type: pdf
+
+      - name: Move and Rename
+        run: mv CV.pdf Matthew-Hammond-CV.pdf
 
       - name: Setup Pages
         uses: actions/configure-pages@v5
         
-      - name: Upload artifact
+      - name: Upload Artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: "."
+          path: "build/"
           
       - name: Deploy to GitHub Pages
         id: deployment
