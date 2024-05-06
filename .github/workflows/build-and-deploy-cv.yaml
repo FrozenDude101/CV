@@ -1,4 +1,4 @@
-name: Build CV
+name: Build and Deploy CV
 run-name: Rebuild triggered by @${{github.actor}}
 on:
   push:
@@ -22,6 +22,10 @@ jobs:
       - name: Check Out the Repository
         uses: actions/checkout@v4
         
+      - name: Get current date
+        id: date
+        run: echo "::set-output name=date::$(date +'%Y-%m-%d')"
+        
       - name: Build the CV
         uses: xu-cheng/latex-action@v3
         with:
@@ -40,10 +44,10 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          tag_name: latest
-          release_name: Latest CV
-          draft: false
-          prerelease: false
+          tag_name: ${{ steps.date.outputs.date }}
+          release_name: Current CV
+          body: |
+            Latest CV as of ${{ steps.date.outputs.date }}
           
       - name: Upload CV
         uses: actions/upload-release-asset@v1
