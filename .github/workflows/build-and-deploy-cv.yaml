@@ -31,13 +31,6 @@ jobs:
         with:
           root_file: source/CV.tex
           
-      - name: Delete Previous Release(s)
-        uses: dev-drprasad/delete-older-releases@v0.3.3
-        with:
-          keep_latest: 0
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          
       - name: Create Release
         id: create_release
         uses: actions/create-release@v1
@@ -48,6 +41,8 @@ jobs:
           release_name: Current CV
           body: |
             Latest CV as of ${{ steps.date.outputs.date }}
+            Commit Message:
+              ${{ github.event.head_commit.message }}
           
       - name: Upload CV
         uses: actions/upload-release-asset@v1
